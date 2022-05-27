@@ -8,10 +8,6 @@ case $- in
       *) return;;
 esac
 
-# Activate vi mode with <Escape>:
-# set -o vi
-
-
 # don't put duplicate lines or lines starting with space in the history.
 # See bash(1) for more options
 HISTCONTROL=ignoreboth
@@ -47,7 +43,7 @@ esac
 # uncomment for a colored prompt, if the terminal has the capability; turned
 # off by default to not distract the user: the focus in a terminal window
 # should be on the output of commands, not on the prompt
-#force_color_prompt=yes
+force_color_prompt=yes
 
 if [ -n "$force_color_prompt" ]; then
     if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
@@ -60,43 +56,11 @@ if [ -n "$force_color_prompt" ]; then
     fi
 fi
 
-#if [ "$color_prompt" = yes ]; then
-#   PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
-#else
-#   PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
-#fi
-
-# Green Red Arow Prompt
-build_prompt() {
-	EXIT=$?               # save exit code of last command
-	red='\[\e[1;31m\]'    # colors
-	green='\[\e[1;32m\]'
-	blue='\[\e[1;34m\]'
-	cyan='\[\e[1;36m\]'
-	reset='\[\e[0m\]'
-
-	PS1='${debian_chroot:+($debian_chroot)}'  # begin prompt
-
-	if [ -z "$VIRTUAL_ENV_DISABLE_PROMPT" ] ; then
-		_OLD_VIRTUAL_PS1="$PS1"
-		if [ "`basename \"$VIRTUAL_ENV\"`" = "__" ] ; then
-			PS1="[`basename \`dirname \"$VIRTUAL_ENV\"\``] $PS1"
-		elif [ "$VIRTUAL_ENV" != "" ]; then
-			PS1="(`basename \"$VIRTUAL_ENV\"`)$PS1"
-		fi
-		if [ $EXIT != 0 ]; then  # add arrow color dependent on exit cod
-			PS1+="$red"
-		else
-			PS1+="$green"
-		fi
-	fi
-	PS1+="→$reset  $blue\W$reset \\$ " # construct rest of prompt
-	export PS1
-}
-
-
-PROMPT_COMMAND=build_prompt
-
+if [ "$color_prompt" = yes ]; then
+    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+else
+    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+fi
 unset color_prompt force_color_prompt
 
 # If this is an xterm set the title to user@host:dir
@@ -108,32 +72,25 @@ xterm*|rxvt*)
     ;;
 esac
 
-#alias act="unset PROMPT_COMMAND && source ./venv/bin/activate" 
-#alias dact="deactivate && export PROMPT_COMMAND=prompt_command"
-
-
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
     alias ls='ls --color=auto'
     alias dir='dir --color=auto'
-    #alias vdir='vdir --color=auto'
+    alias vdir='vdir --color=auto'
 
     alias grep='grep --color=auto'
-    #alias fgrep='fgrep --color=auto'
+    alias fgrep='fgrep --color=auto'
     alias egrep='egrep --color=auto'
 fi
 
 # colored GCC warnings and errors
-#export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
+export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
 # some more ls aliases
 alias ll='ls -l'
 alias la='ls -A'
-#alias l='ls -CF'
-
-# Docker alias
-alias dockerps='docker ps --format="ID\t{{.ID}}\nNAME\t{{.Names}}\nIMAGE\t{{.Image}}\nPORTS\t{{.Ports}}\nCOMMAND\t{{.Command}}\nCREATED\t{{.CreatedAt}}\nSTATUS\t{{.Status}}\n"'
+alias l='ls -CF'
 
 # Alias definitions.
 # You may want to put all your additions into a separate file like
@@ -154,17 +111,3 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
-
-# PATH
-export PATH=$PATH:/home/alexandre/Scripts
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
-if command -v pyenv 1>/dev/null 2>&1; then
-  eval "$(pyenv init -)"
-fi
-
-# Environment variable email password
-export EMAIL_ADDRESS="alxndr3@gmail.com"
-export EMAIL_PASS="password*"
-
-
