@@ -13,6 +13,7 @@ return {
             })
         end,
     },
+
     {
         "williamboman/mason-lspconfig.nvim",
         dependencies = {
@@ -24,13 +25,14 @@ return {
                 ensure_istalled = {
                     "bashls",
                     "lua_ls",
-                    -- "pyright",
+                    "pyright",
                     "yamlls",
+                    "clangd"
                 }
             })
             require("mason-lspconfig").setup_handlers(
             {
-                function (server_name) -- default handler (optional)
+                function(server_name) -- default handler (optional)
                     require("lspconfig")[server_name].setup({})
                 end,
             })
@@ -43,7 +45,8 @@ return {
             local lspconfig = require("lspconfig")
             lspconfig.bashls.setup({})
             lspconfig.lua_ls.setup({})
-            lspconfig.pyright.setup({})
+            lspconfig.basedpyright.setup({})
+            lspconfig.clangd.setup({})
         end,
     }
 }

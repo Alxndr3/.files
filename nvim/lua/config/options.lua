@@ -27,6 +27,8 @@ if not vim.env.SSH_TTY then
   opt.clipboard = "unnamedplus" -- Sync with system clipboard
 end
 
+opt.autoindent = true
+opt.cmdheight = 1 -- bottom padding 
 opt.completeopt = "menu,menuone,noselect"
 opt.conceallevel = 2 -- Hide * markup for bold and italic, but not markers with substitutions
 opt.confirm = true -- Confirm to save changes before exiting modified buffer
@@ -50,6 +52,7 @@ opt.scrolloff = 4 -- Lines of context
 opt.sessionoptions = { "buffers", "curdir", "tabpages", "winsize", "help", "globals", "skiprtp", "folds" }
 opt.shiftround = true -- Round indent
 opt.shiftwidth = 4 -- Size of an indent
+opt.tabstop = 4 -- Number of spaces tabs count for
 opt.shortmess:append({ W = true, I = true, c = true, C = true })
 opt.showmode = false -- Dont show mode since we have a statusline
 opt.sidescrolloff = 8 -- Columns of context
@@ -60,9 +63,9 @@ opt.spelllang = { "en" }
 opt.splitbelow = true -- Put new windows below current
 opt.splitkeep = "screen"
 opt.splitright = true -- Put new windows right of current
-opt.tabstop = 4 -- Number of spaces tabs count for
+opt.syntax = "on"
 opt.termguicolors = true -- True color support
-opt.textwidth = 120 
+opt.textwidth = 120
 if not vim.g.vscode then
   opt.timeoutlen = 300 -- Lower than default (1000) to quickly trigger which-key
 end
@@ -81,20 +84,3 @@ opt.fillchars = {
   diff = "╱",
   eob = " ",
 }
-
--- lsp diagnostics
-vim.keymap.set('n', '<space>e', vim.diagnostic.open_float)
-vim.keymap.set('n', '[d', vim.diagnostic.goto_prev)
-vim.keymap.set('n', ']d', vim.diagnostic.goto_next)
-vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist)
-
-opt.cmdheight = 1 -- bottom padding 
-
--- run scripts
-        -- autocmd BufEnter *.py let @g=":w\<CR>:ToggleTerm | python %\<CR>i"
-        -- autocmd BufEnter *.py let @g=":w\<CR>:! python %\<CR>"
-vim.cmd [[
-    augroup run_file
-        autocmd BufEnter *.py let @g=":w\<CR>:10sp | terminal python %\<CR>i"
-        autocmd BufEnter *.sh let @g=":w\<CR>:10sp | terminal bash %\<CR>i"
-]]
