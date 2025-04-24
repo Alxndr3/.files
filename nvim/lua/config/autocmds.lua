@@ -5,16 +5,36 @@
 -- Run
 vim.cmd [[
     augroup run_file
-        autocmd BufEnter *.py let @g=":w\<CR>:10sp | terminal python %\<CR>i"
-        autocmd BufEnter *.sh let @g=":w\<CR>:10sp | terminal bash %\<CR>i"
+       autocmd BufEnter *.py let @r=":w\<CR>:10sp | terminal python %\<CR>i"
+       autocmd BufEnter *.sh let @r=":w\<CR>:10sp | terminal bash %\<CR>i"
 ]]
 
 -- Folding
-vim.cmd [[
-    augroup folding
-        autocmd BufWinLeave ?* silent! mkview
-        autocmd BufWinEnter ?* silent! loadview
-]]
+-- vim.cmd [[
+--     augroup folding
+--         autocmd BufWinLeave ?* silent! mkview
+--         autocmd BufWinEnter ?* silent! loadview
+-- ]]
+
+vim.api.nvim_create_autocmd({"BufWinLeave", "BufLeave", "BufWritePost", "BufHidden"}, {
+    pattern = {"*.*"},
+    callback = function()
+        -- Only save view for normal files with content
+        if vim.fn.expand("%") ~= "" and vim.bo.filetype ~= "gitcommit" then
+            vim.cmd("mkview")
+        end
+    end,
+})
+
+vim.api.nvim_create_autocmd({"BufWinEnter"}, {
+    pattern = {"*.*"},
+    callback = function()
+        -- Only load view for normal files
+        if vim.fn.expand("%") ~= "" and vim.bo.filetype ~= "gitcommit" then
+            vim.cmd("silent! loadview")
+        end
+    end,
+})
 
 -- Indent by filetype
 vim.api.nvim_create_autocmd("FileType", {

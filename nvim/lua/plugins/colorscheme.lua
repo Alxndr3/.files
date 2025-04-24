@@ -8,6 +8,7 @@ return {
         "LazyVim/LazyVim",
         opts = {
             colorscheme = "gruvbox",
+            lazy = false,
         },
         icons = {
             misc = {
